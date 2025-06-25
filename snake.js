@@ -4,7 +4,6 @@ function Snake(){
   this.xspeed = 1;
   this.yspeed = 0;
   this.currentDir = 1;
-  this.previousDir = 1;
   /* Directions 
   UP -> 0
   LEFT - > 1
@@ -15,14 +14,11 @@ function Snake(){
   this.tail.unshift(new bodySegment(this.x - 60,this.y,0,3))
   this.tail.unshift(new bodySegment(this.x - 40,this.y,0,3))
   this.tail.unshift(new bodySegment(this.x - 20,this.y,0,3))
-  this.total = 3
+  this.total = 10
   this.update = function() {
-        if (this.total > 0 ){
             var pID = this.CalculateBodyPiece(this.tail[0].dir,this.currentDir)
             this.tail.unshift(new bodySegment(this.x,this.y,pID,this.currentDir))
-        } else {
-            this.tail.unshift(new bodySegment(this.x,this.y,0,this.currentDir))
-        }
+
     while (this.tail.length > this.total){
         this.tail.pop()
     }
@@ -36,7 +32,7 @@ function Snake(){
     this.x = int(constrain(this.x,0,width-scl))
     this.y = int(constrain(this.y,0,height-scl))
     this.eat(this.x,this.y)
-
+    console.log(this.tail)
 
   }
 
@@ -110,14 +106,7 @@ this.dir = function(d){
 
 
     this.grow = function(){
-        this.total ++;
-        if (this.total > 0 ){
-            var pID = this.CalculateBodyPiece(this.tail[0].dir,this.currentDir)
-            this.tail.unshift(new bodySegment(this.x,this.y,pID,this.currentDir))
-        } else {
-            this.tail.unshift(new bodySegment(this.x,this.y,0,this.currentDir))
-        }
-        
+        //this.total ++;
         chompSound.play()
     }
 
@@ -130,23 +119,26 @@ this.dir = function(d){
         }
     }
 
-    this.CalculateBodyPiece = function(cDir,pDir){
-
+    this.CalculateBodyPiece = function(pDir,cDir){
         if (cDir == pDir){
             console.log(`CDIR ${cDir}, PDIR ${pDir} -> 0`)
             return 0
+        } else 
+        if ( cDir ==0 && pDir == 1){
+            console.log(`CDIR ${cDir}, PDIR ${pDir} -> 4`)
+            return 2
         }
-        if (cDir == 0 && pDir == 1){
-            console.log(`CDIR ${cDir}, PDIR ${pDir} -> 3`)
-            return 3
-        }
-        if (cDir == 1 && pDir == 3){
-            console.log(`CDIR ${cDir}, PDIR ${pDir} -> 1`)
+        if ( cDir ==1 && pDir == 2){
+            console.log(`CDIR ${cDir}, PDIR ${pDir} -> 4`)
             return 1
         }
-
+        else {
         console.log(`CDIR ${cDir}, PDIR ${pDir} -> ?`)
-        return random([0,1,2,3,4])
+        return 0 
+        }
+
+
+
     }
 
 }
